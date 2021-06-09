@@ -1,17 +1,17 @@
 <template>
-  <div class="hello">
+  <div class="about">
     <h3>{{ todo }}</h3>
-    {{todoItems}}
+    {{msg}}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'hello',
+  name: 'about',
   data () {
     return {
-      todo: '오늘 해야 할 일',
-      todoItems: ['1. 밥 먹기.', '2. 잠자기.']
+      todo: '?',
+      msg: '내가 개발한 To Do 어플이다.'
     }
   }
 }
