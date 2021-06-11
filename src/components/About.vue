@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h3>{{ todo }}</h3>
+    <!-- <h3>{{ todo }}</h3> -->
     {{msg}}
   </div>
 </template>
@@ -8,9 +8,8 @@
 <script>
 export default {
   name: 'about',
-  data () {
+  data: () => {
     return {
-      todo: '?',
       msg: '내가 개발한 To Do 어플이다.'
     }
   }

@@ -1,18 +1,33 @@
 <template>
   <div class="hello">
     <h3>{{ todo }}</h3>
-    {{todoItems}}
+    <ul v-if="toDoItems && toDoItems.length">
+      <li v-for="toDoItem of toDoItems" v-bind:key="toDoItem">
+        {{toDoItem.title}}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import axios from 'axios' // 아깐 받은 axios 패키지를 사용하기 위해 import.
+
 export default {
   name: 'hello',
-  data () {
+  data: () => {
     return {
       todo: '오늘 해야 할 일',
-      todoItems: ['1. 밥 먹기.', '2. 잠자기.']
+      toDoItems: []
     }
+  },
+  created () {
+    axios.get('http://127.0.0.1:5000/todo/')
+      .then(response => {
+        this.toDoItems = response.data.map(r => r.data) // 반환되는 값을 toDoItems에 저장.
+      })
+      .catch(e => {
+        console.log('error: ', e)
+      })
   }
 }
 </script>
