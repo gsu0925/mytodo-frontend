@@ -13,7 +13,7 @@
           <b-row class="my-1 mb-4">
             <b-col sm="10">
               <b-form-input v-model="newToDoItemRequest.title" type="text" 
-                      placeholder="새 할 일을 적으세요." v-on:keyup.enter="createToDo"/>
+                      placeholder="새 할 일을 적으세요." @keyup.enter="createToDo"/>
             </b-col>
             <b-col sm="2">
               <b-button variant="outline-warning" v-on:click="createToDo"> 추가 </b-button>
@@ -23,17 +23,18 @@
       </b-form-group>
 
       <b-list-group v-if="toDoItems && toDoItems.length">
-        <b-list-group-item
+        <b-list-group-item 
           v-for="toDoItem of toDoItems"
-          v-bind:data="toDoItem.title"
-          v-bind:key="toDoItem.id">
+          v-bind:data="toDoItem.id"
+          v-bind:key="toDoItem.id" style="display:flex;">
           <b-form-checkbox
-            v-model="toDoItem.done" class="m-1">
-              {{toDoItem.title}}
+            v-model="toDoItem.done" 
+            v-on:change="markDone(toDoItem)">
           </b-form-checkbox>
+          <span v-if="toDoItem.done" style="text-decoration: line-through; color:#D3D3D3;">{{toDoItem.title}}</span>
+          <span v-else>{{toDoItem.title}}</span>
         </b-list-group-item>
       </b-list-group>
-      
     </b-card>
   </div>
 </template>
@@ -71,6 +72,26 @@ export default {
           /* axios 호출 성공하면 */
           vm.initToDoList()
           vm.newToDoItemRequest = {}
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    markDone: function (toDoItem) {
+      if (!toDoItem) return
+      let vm = this
+      toDoItem.done = !toDoItem.done /* true->false, flase->true로 변경 */
+      if (toDoItem.done === true) {
+        toDoItem.done = false
+      } else if (toDoItem.done === false) {
+        toDoItem.done = true
+      } else {
+        return
+      }
+      axios.put(baseUrl, toDoItem) // 백엔드 서버로 request를 보냄
+        .then(response => {
+          /* axios 호출 성공하면 리스트 갱신 */
+          vm.initToDoList()
         })
         .catch(error => {
           console.log(error)
